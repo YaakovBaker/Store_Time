@@ -45,17 +45,17 @@ class Store(BaseModel):
 
     items: List[Item] = []
 
-    address: str
-    city: str
-    state: str
-    zip: str
+    address: Union[str, None] = None
+    city: Union[str, None] = None
+    state: Union[str, None] = None
+    zip: Union[str, None] = None
 
     phone: str
     email: str
     url: str
 
-    hours: str
-    notes: str
+    hours: Union[str, None] = None
+    notes: Union[str, None] = None
     
     created_at: str
     updated_at: str
@@ -93,9 +93,9 @@ class Store(BaseModel):
         }
 
 
-class ItemList(BaseModel):
+class ItemRef(BaseModel):
     """
-    ItemList is a refrence for barcode scanners that when a barcode is scanned one can
+    ItemRef is a refrence for barcode scanners that when a barcode is scanned one can
     find the associated item in the store.
     """
     item_id: int
