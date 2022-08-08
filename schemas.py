@@ -15,6 +15,7 @@ class Item(BaseModel):
     """
     Item is a model that represents an item in the store.
     """
+    item_id: int
     name: str
     price: float
     quantity: int
@@ -26,6 +27,7 @@ class Item(BaseModel):
         orm_mode = True
         schema_extra = {
             "example": {
+                "item_id": 1,
                 "name": "Foo",
                 "price": 10.0,
                 "quantity": 10,
