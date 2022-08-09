@@ -94,6 +94,38 @@ class Store(BaseModel):
             }
         }
 
+class User(BaseModel):
+    """
+    User is a model that represents a user.
+    """
+    id: int
+    email: str
+    hashed_password: str
+    is_active: bool
+    money: float
+    items: List[Item] = []
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "id": 1,
+                "email": "example@gmail.com",
+                "hashed_password": "password",
+                "is_active": True,
+                "money": 0,
+                "items": [
+                    {
+                        "name": "Foo",
+                        "price": 10.0,
+                        "quantity": 10,
+                        "description": "This is a description",
+                        "tax": 0.05,
+                        "image_url": "https://example.com/image.png",
+                    }
+                ]
+            }
+        }
+
 
 class ItemRef(BaseModel):
     """

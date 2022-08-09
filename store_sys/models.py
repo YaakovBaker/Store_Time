@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
-from .database import Base
+from database import Base
 
 
 class User(Base):
@@ -12,17 +12,18 @@ class User(Base):
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
     money = Column(Integer, default=0)
-    items = relationship("Item", back_populates="owner")
+    #items = relationship("Item", back_populates="users")
+    #item_id = Column(Integer, ForeignKey("items.item_id"))
 
 
 class Item(Base):
     __tablename__ = "items"
 
     item_id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
+    name = Column(String)
     price = Column(String)
     quantity = Column(Integer)
-    description = Column(String, index=True)
+    description = Column(String)
     tax = Column(String)
     image_url = Column(String)
 
@@ -33,7 +34,7 @@ class Store(Base):
     store_name = Column(String, index=True)
     store_type = Column(String, index=True)
     
-    items = relationship("Item", back_populates="store")
+    #items = relationship("Item", back_populates="stores")
 
     address = Column(String, index=True)
     city = Column(String, index=True)
@@ -56,4 +57,4 @@ class ItemRef(Base):
 
     item_id = Column(Integer, primary_key=True, index=True)
     barcode = Column(String, index=True)
-    item = relationship("Item", back_populates="store")
+    #item = relationship("Item", back_populates="item_ref")
