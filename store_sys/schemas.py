@@ -12,7 +12,7 @@ class StoreType(str, Enum):
     warehouse = "warehouse"
 
 
-class Item(BaseModel):
+class ItemCreate(BaseModel):
     """
     Item is a model that represents an item in the store.
     """
@@ -38,7 +38,7 @@ class Item(BaseModel):
             }
         }
 
-class Store(BaseModel):
+class StoreCreate(BaseModel):
     """
     Store is a model that represents a store.
     """
@@ -61,11 +61,12 @@ class Store(BaseModel):
     hours: Union[str, None] = None
     notes: Union[str, None] = None
     
-    created_at: datetime = datetime.now()
-    updated_at: datetime = datetime.now()
+    created_at: datetime
+    updated_at: datetime
     active: Union[bool, None] = True
 
     class Config:
+        orm_mode = True
         schema_extra = {
             "example": {
                 "store_id": 1,
@@ -97,7 +98,7 @@ class Store(BaseModel):
             }
         }
 
-class User(BaseModel):
+class UserCreate(BaseModel):
     """
     User is a model that represents a user.
     """
@@ -106,9 +107,10 @@ class User(BaseModel):
     hashed_password: str
     is_active: bool
     money: float
-    items: List[Item] = []
+    items: List[ItemCreate] = []
 
     class Config:
+        orm_mode = True
         schema_extra = {
             "example": {
                 "id": 1,
@@ -138,9 +140,10 @@ class ItemRef(BaseModel):
     item_id: int
     #barcode to item ditionary
     barcode: str
-    item: Item
+    item: ItemCreate
 
     class Config:
+        orm_mode = True
         schema_extra = {
             "example": {
                 "item_id": 1,
