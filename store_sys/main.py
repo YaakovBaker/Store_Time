@@ -2,10 +2,9 @@ from fastapi import Depends, FastAPI, HTTPException, Cookie
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine
-from models import Base
-import schemas, crud
+import schemas, crud, models
 
-Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -22,7 +21,13 @@ def get_db():
 def root():
     return RedirectResponse("/docs")
 
+@app.post("/items/", response_model=schemas.Item)
+def create_item(item: schemas.Item, db: Session = Depends(get_db)):
+    return crud.create_item(db=db, item=item)
 
+@app.post("/store", response_model=schemas.Store)
+def create_store(request: schemas.Store, db: Session = Depends(get_db)):
+    return crud.create_store(db=db, store=request)
 
 #@app.post("/login")
 #def login( user: schemas.User, db: Session = Depends(get_db)):
@@ -53,10 +58,7 @@ def root():
 #    return db_user
 
 
-@app.post("/items/", response_model=schemas.Item)
-def create_item(item: schemas.Item, db: Session = Depends(get_db)
-):
-    return crud.create_item(db=db, item=item)
+
 
 
 #@app.get("/items/", response_model=list[schemas.Item])

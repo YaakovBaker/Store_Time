@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List, Union
 from pydantic import BaseModel
+from datetime import datetime
 
 class StoreType(str, Enum):
     """
@@ -41,11 +42,12 @@ class Store(BaseModel):
     """
     Store is a model that represents a store.
     """
-    store_id: int
+    #primary store_id is auto-incremented
+    store_id: Union[int, None] = None
     store_name: str
     store_type: StoreType
 
-    items: List[Item] = []
+    #items: List[Item] = []
 
     address: Union[str, None] = None
     city: Union[str, None] = None
@@ -59,9 +61,9 @@ class Store(BaseModel):
     hours: Union[str, None] = None
     notes: Union[str, None] = None
     
-    created_at: str
-    updated_at: str
-    active: bool
+    created_at: datetime = datetime.now()
+    updated_at: datetime = datetime.now()
+    active: Union[bool, None] = True
 
     class Config:
         schema_extra = {
@@ -69,16 +71,17 @@ class Store(BaseModel):
                 "store_id": 1,
                 "store_name": "Foo",
                 "store_type": "physical",
-                "items": [
-                    {
-                        "name": "Foo",
-                        "price": 10.0,
-                        "quantity": 10,
-                        "description": "This is a description",
-                        "tax": 0.05,
-                        "image_url": "https://example.com/image.png",
-                    }
-                ],
+                #"items": [
+                #    {
+                #        "item_id": 1,
+                #        "name": "Foo",
+                #        "price": 10.0,
+                #        "quantity": 10,
+                #        "description": "This is a description",
+                #        "tax": 0.05,
+                #        "image_url": "https://example.com/image.png",
+                #    }
+                #]
                 "address": "123 Main St",
                 "city": "Los Angeles",
                 "state": "CA",
@@ -88,8 +91,8 @@ class Store(BaseModel):
                 "url": "https://example.com",
                 "hours": "Mon-Fri: 9am-5pm",
                 "notes": "This is a note",
-                "created_at": "2020-01-01T00:00:00.000Z",
-                "updated_at": "2020-01-01T00:00:00.000Z",
+                "created_at": "2020-01-01T00:00:00",
+                "updated_at": "2020-01-01T00:00:00",
                 "active": True,
             }
         }
