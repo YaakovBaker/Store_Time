@@ -38,10 +38,31 @@ class ItemCreate(BaseModel):
             }
         }
 
+class ItemUpdate(BaseModel):
+    price: float
+    quantity: int
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "price": 20.0,
+                "quantity": 20
+            }
+        }
+
+class ItemShow(BaseModel):
+    name: str
+    price: float
+    quantity: int
+    description: str
+    image_url: str
+
+    class Config:
+        orm_mode = True
+
 class StoreCreate(BaseModel):
-    """
-    Store is a model that represents a store.
-    """
+
     #primary store_id is auto-incremented
     store_id: Union[int, None] = None
     store_name: str
@@ -97,6 +118,95 @@ class StoreCreate(BaseModel):
                 "active": True,
             }
         }
+
+class StoreUpdate(BaseModel):
+    
+    store_name: Union[str, None] = None
+    store_type: Union[StoreType, None] = None
+
+    #items: List[Item] = []
+
+    address: Union[str, None] = None
+    city: Union[str, None] = None
+    state: Union[str, None] = None
+    zip: Union[str, None] = None
+
+    phone: Union[str, None] = None
+    email: Union[str, None] = None
+    url: Union[str, None] = None
+
+    hours: Union[str, None] = None
+    notes: Union[str, None] = None
+    
+    created_at: Union[datetime, None] = None
+    updated_at: Union[datetime, None] = None
+    active: Union[bool, None] = True
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "store_name": "Foo",
+                "store_type": "physical",
+                #"items": [
+                #    {
+                #        "item_id": 1,
+                #        "name": "Foo",
+                #        "price": 10.0,
+                #        "quantity": 10,
+                #        "description": "This is a description",
+                #        "tax": 0.05,
+                #        "image_url": "https://example.com/image.png",
+                #    }
+                #]
+                "address": "123 Main St",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zip": "12345",
+                "phone": "123-456-7890",
+                "email": "example@gmail.com",
+                "url": "https://example.com",
+                "hours": "Mon-Fri: 9am-5pm",
+                "notes": "This is a note",
+                "created_at": "2020-01-01T00:00:00",
+                "updated_at": "2020-01-01T00:00:00",
+                "active": True,
+            }
+        }
+
+class StoreShow(BaseModel):
+    
+    store_name: str
+    store_type: StoreType
+    
+    address: str
+    city: str
+    state: str
+    zip: str
+    
+    phone: str
+    email: str
+    url: str
+    
+    hours: str
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "store_name": "Foo",
+                "store_type": "physical",
+                "address": "123 Main St",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zip": "12345",
+                "phone": "123-456-7890",
+                "email": "example@gmail.com",
+                "url": "https://example.com",
+                "hours": "Mon-Fri: 9am-5pm"
+            }
+        }
+
 
 class UserCreate(BaseModel):
     """

@@ -1,3 +1,4 @@
+from fastapi import HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 import models, schemas
@@ -44,7 +45,14 @@ def create_item(db: Session, item: schemas.ItemCreate):
 def delete_item(db: Session, item_id: int):
     db.query(models.Item).filter(models.Item.item_id == item_id).delete(synchronize_session=False)
     db.commit()
-    return "Item deleted"
+
+#Update item methods
+def update_item(db: Session, item: schemas.ItemUpdate, item_id: int):
+    db_item = db.query(models.Item).filter(models.Item.item_id == item_id)
+    if not db_item.first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Item with id {item_id} was not found")
+    db_item.update(item.dict())
+    db.commit()
 
 
 #Store methods
@@ -68,4 +76,11 @@ def create_store(db: Session, store: schemas.StoreCreate):
 def delete_store(db: Session, store_id: int):
     db.query(models.Store).filter(models.Store.store_id == store_id).delete(synchronize_session=False)
     db.commit()
-    return "Store deleted"
+
+#Update store methods
+def update_store(db: Session, store: schemas.StoreUpdate, store_id: int):
+    db_store = db.query(models.Store).filter(models.Store.store_id == store_id)
+    if not db_store.first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Store with id {store_id} was not found")
+    db_store.update(store.dict())
+    db.commit()
