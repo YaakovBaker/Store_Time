@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import Depends, FastAPI, HTTPException, Cookie, Query, status
+from fastapi import Depends, FastAPI, HTTPException, Cookie, Query, status, Response
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine
@@ -34,9 +34,20 @@ def create_item(item: schemas.ItemCreate, db: Session = Depends(get_db)):
 def get_all_items(db: Session = Depends(get_db), limit: int = Query(100, ge=0, le=100, description="How many items to return at most.")):
     return crud.get_items(db=db, limit=limit)
 
-@app.get("/items/{item_id}", response_model=schemas.ItemCreate)
-def get_item(item_id: int, db: Session = Depends(get_db)):
-    return crud.get_item(db=db, item_id=item_id)
+@app.get("/items/{item_id}", status_code=status.HTTP_200_OK)
+def get_item(item_id: int, response: Response, db: Session = Depends(get_db)):
+    return_item = crud.get_item(db=db, item_id=item_id)
+
+    if not return_item:
+       raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+                        detail=f"Item with id {item_id} was not found")
+    
+    return return_item
+
+#DELETE Item Methods
+@app.delete("/items/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_item(item_id: int, db: Session = Depends(get_db)):
+    return crud.delete_item(db=db, item_id=item_id)
 
 
 #Store Methods
@@ -55,7 +66,10 @@ def get_all_stores(db: Session = Depends(get_db), limit: int = Query(100, ge=0, 
 def get_store(store_id: int, db: Session = Depends(get_db)):
     return crud.get_store(db=db, store_id=store_id)
 
-
+#DELETE Store Methods
+@app.delete("/store/{store_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_store(store_id: int, db: Session = Depends(get_db)):
+    return crud.delete_store(db=db, store_id=store_id)
 
 #for debugging purposes
 #if __name__ == "__main__":

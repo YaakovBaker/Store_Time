@@ -40,6 +40,12 @@ def create_item(db: Session, item: schemas.ItemCreate):
     db.refresh(db_item)
     return db_item
 
+#Delete item methods
+def delete_item(db: Session, item_id: int):
+    db.query(models.Item).filter(models.Item.item_id == item_id).delete(synchronize_session=False)
+    db.commit()
+    return "Item deleted"
+
 
 #Store methods
 
@@ -57,3 +63,9 @@ def create_store(db: Session, store: schemas.StoreCreate):
     db.commit()
     db.refresh(db_store)
     return db_store
+
+#Delete store methods
+def delete_store(db: Session, store_id: int):
+    db.query(models.Store).filter(models.Store.store_id == store_id).delete(synchronize_session=False)
+    db.commit()
+    return "Store deleted"
