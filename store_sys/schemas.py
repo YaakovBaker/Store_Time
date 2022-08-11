@@ -62,7 +62,7 @@ class StoreCreate(BaseModel):
     store_name: str
     store_type: StoreType
 
-    #items: List[Item] = []
+    inventory: List[ItemCreate] = []
 
     address: Union[str, None] = None
     city: Union[str, None] = None
@@ -86,16 +86,16 @@ class StoreCreate(BaseModel):
             "example": {
                 "store_name": "Foo",
                 "store_type": "physical",
-                #"items": [
-                #    {
-                #        "name": "Foo",
-                #        "price": 10.0,
-                #        "quantity": 10,
-                #        "description": "This is a description",
-                #        "tax": 0.05,
-                #        "image_url": "https://example.com/image.png",
-                #    }
-                #]
+                "items": [
+                    {
+                        "name": "Foo",
+                        "price": 10.0,
+                        "quantity": 10,
+                        "description": "This is a description",
+                        "tax": 0.05,
+                        "image_url": "https://example.com/image.png",
+                    }
+                ],
                 "address": "123 Main St",
                 "city": "Los Angeles",
                 "state": "CA",
@@ -116,7 +116,7 @@ class StoreUpdate(BaseModel):
     store_name: Union[str, None] = None
     store_type: Union[StoreType, None] = None
 
-    #items: List[Item] = []
+    inventory: List[ItemCreate] = []
 
     address: Union[str, None] = None
     city: Union[str, None] = None
@@ -140,16 +140,16 @@ class StoreUpdate(BaseModel):
             "example": {
                 "store_name": "Foo",
                 "store_type": "physical",
-                #"items": [
-                #    {
-                #        "name": "Foo",
-                #        "price": 10.0,
-                #        "quantity": 10,
-                #        "description": "This is a description",
-                #        "tax": 0.05,
-                #        "image_url": "https://example.com/image.png",
-                #    }
-                #]
+                "items": [
+                    {
+                        "name": "Foo",
+                        "price": 10.0,
+                        "quantity": 10,
+                        "description": "This is a description",
+                        "tax": 0.05,
+                        "image_url": "https://example.com/image.png",
+                    }
+                ],
                 "address": "123 Main St",
                 "city": "Los Angeles",
                 "state": "CA",
@@ -206,7 +206,7 @@ class UserCreate(BaseModel):
     password: str
     is_active: Union[bool, None] = True
     money: Union[float, None] = 0.0
-    #items: List[ItemCreate] = []
+    item_cart: List[ItemCreate] = []
 
     class Config:
         orm_mode = True
@@ -215,46 +215,54 @@ class UserCreate(BaseModel):
                 "first_name": "John",
                 "last_name": "Doe",
                 "email": "example@gmail.com",
-                "password": "password"#,
-                #"is_active": True,
-                #"money": 0.0
-                #"items": [
-                #    {
-                #        "name": "Foo",
-                #        "price": 10.0,
-                #        "quantity": 10,
-                #        "description": "This is a description",
-                #        "tax": 0.05,
-                #        "image_url": "https://example.com/image.png",
-                #    }
-                #]
+                "password": "password",
+                "is_active": True,
+                "money": 0.0,
+                "item_cart": [
+                    {
+                        "name": "Foo",
+                        "price": 10.0,
+                        "quantity": 10,
+                        "description": "This is a description",
+                        "tax": 0.05,
+                        "image_url": "https://example.com/image.png",
+                    }
+                ]
             }
         }
 
+class UserShow(BaseModel):
+    first_name:str
+    last_name:str
+    email:str
+    money:float
 
-class ItemRef(BaseModel):
+    class Config:
+        orm_mode = True
+
+#class ItemRef(BaseModel):
     """
     ItemRef is a refrence for barcode scanners that when a barcode is scanned one can
     find the associated item in the store.
     """
-    item_id: int
+    #item_id: int
     #barcode to item ditionary
-    barcode: str
-    item: ItemCreate
+    #barcode: str
+    #item: ItemCreate
 
-    class Config:
-        orm_mode = True
-        schema_extra = {
-            "example": {
-                "item_id": 1,
-                "barcode": "123456789",
-                "item": {
-                    "name": "Foo",
-                    "price": 10.0,
-                    "quantity": 10,
-                    "description": "This is a description",
-                    "tax": 0.05,
-                    "image_url": "https://example.com/image.png",
-                }
-            }
-        }
+    #class Config:
+        #orm_mode = True
+        #schema_extra = {
+            #"example": {
+                #"item_id": 1,
+                #"barcode": "123456789",
+                #"item": {
+               #     "name": "Foo",
+              #      "price": 10.0,
+             #       "quantity": 10,
+            #        "description": "This is a description",
+           #         "tax": 0.05,
+          #          "image_url": "https://example.com/image.png",
+         #       }
+        #    }
+       # }
