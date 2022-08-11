@@ -1,3 +1,4 @@
+from typing import Union
 from fastapi import HTTPException, Response, status
 from sqlalchemy.orm import Session
 from hashing import Hash
@@ -19,12 +20,25 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 #create user methods
-def create_user(db: Session, user: schemas.UserCreate):
-    db_user = models.User(email=user.email, hashed_password=Hash.bcrypt(user.password), first_name=user.first_name, last_name=user.last_name)
+def create_user(db: Session, user: schemas.UserCreate, item_id: Union[int, None] = None):
+    db_user = models.User(email=user.email, hashed_password=Hash.bcrypt(user.password), first_name=user.first_name, last_name=user.last_name, item_id=item_id)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
     return db_user
+
+#Delete user methods
+def delete_user(db: Session, user_id: int):
+    db.query(models.User).filter(models.User.user_id == user_id).delete(synchronize_session=False)
+    db.commit()
+
+#Update user methods
+def update_user(db: Session, user: schemas.UserUpdate, user_id: int):
+    db_user = db.query(models.User).filter(models.User.user_id == user_id)
+    if not db_user.first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id {user_id} was not found")
+    db_user.update(user.dict())
+    db.commit()
 
 #Item methods
 
@@ -67,9 +81,9 @@ def get_store(db: Session, store_id: int):
     return db.query(models.Store).filter(models.Store.store_id == store_id).first()
 
 #create store methods
-def create_store(db: Session, store: schemas.StoreCreate):
-    db_store = models.Store(**store.dict())
-    db.add(db_store)
+def create_store(db: Session, store: schemas.StoreCreate, item_id: Union[int, None] = None):
+    db_store = models.Store(models.Store.store_name==store.store_name, models.Store.store_type==store.store_type, models.Store.item_id==item_id, models.Store.phone==store.phone, models.Store.email==store.email)
+    db.add(db_store) 
     db.commit()
     db.refresh(db_store)
     return db_store
