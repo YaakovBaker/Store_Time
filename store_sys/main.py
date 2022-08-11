@@ -85,6 +85,25 @@ def update_store(store_id: int, store: schemas.StoreUpdate, db: Session = Depend
     crud.update_store(db=db, store_id=store_id, store=store)
     return Response(status_code=status.HTTP_202_ACCEPTED, content="Store updated")
 
+
+
+#User Methods
+
+#POST User Methods
+@app.post("/user/", status_code=status.HTTP_201_CREATED)
+def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    return crud.create_user(db=db, user=user)
+
+
+
+
+
+
+
+
+
+
+
 #for debugging purposes
 #if __name__ == "__main__":
     #import uvicorn

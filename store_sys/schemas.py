@@ -200,30 +200,34 @@ class StoreShow(BaseModel):
 
 
 class UserCreate(BaseModel):
+    first_name: str
+    last_name: str
     email: str
-    hashed_password: str
-    is_active: bool
-    money: float
-    items: List[ItemCreate] = []
+    password: str
+    is_active: Union[bool, None] = True
+    money: Union[float, None] = 0.0
+    #items: List[ItemCreate] = []
 
     class Config:
         orm_mode = True
         schema_extra = {
             "example": {
+                "first_name": "John",
+                "last_name": "Doe",
                 "email": "example@gmail.com",
-                "hashed_password": "password",
-                "is_active": True,
-                "money": 0,
-                "items": [
-                    {
-                        "name": "Foo",
-                        "price": 10.0,
-                        "quantity": 10,
-                        "description": "This is a description",
-                        "tax": 0.05,
-                        "image_url": "https://example.com/image.png",
-                    }
-                ]
+                "password": "password"#,
+                #"is_active": True,
+                #"money": 0.0
+                #"items": [
+                #    {
+                #        "name": "Foo",
+                #        "price": 10.0,
+                #        "quantity": 10,
+                #        "description": "This is a description",
+                #        "tax": 0.05,
+                #        "image_url": "https://example.com/image.png",
+                #    }
+                #]
             }
         }
 
