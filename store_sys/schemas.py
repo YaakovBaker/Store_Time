@@ -13,10 +13,7 @@ class StoreType(str, Enum):
 
 
 class ItemCreate(BaseModel):
-    """
-    Item is a model that represents an item in the store.
-    """
-    item_id: int
+    
     name: str
     price: float
     quantity: int
@@ -28,7 +25,6 @@ class ItemCreate(BaseModel):
         orm_mode = True
         schema_extra = {
             "example": {
-                "item_id": 1,
                 "name": "Foo",
                 "price": 10.0,
                 "quantity": 10,
@@ -63,8 +59,6 @@ class ItemShow(BaseModel):
 
 class StoreCreate(BaseModel):
 
-    #primary store_id is auto-incremented
-    store_id: Union[int, None] = None
     store_name: str
     store_type: StoreType
 
@@ -90,12 +84,10 @@ class StoreCreate(BaseModel):
         orm_mode = True
         schema_extra = {
             "example": {
-                "store_id": 1,
                 "store_name": "Foo",
                 "store_type": "physical",
                 #"items": [
                 #    {
-                #        "item_id": 1,
                 #        "name": "Foo",
                 #        "price": 10.0,
                 #        "quantity": 10,
@@ -150,7 +142,6 @@ class StoreUpdate(BaseModel):
                 "store_type": "physical",
                 #"items": [
                 #    {
-                #        "item_id": 1,
                 #        "name": "Foo",
                 #        "price": 10.0,
                 #        "quantity": 10,
@@ -209,10 +200,6 @@ class StoreShow(BaseModel):
 
 
 class UserCreate(BaseModel):
-    """
-    User is a model that represents a user.
-    """
-    id: int
     email: str
     hashed_password: str
     is_active: bool
@@ -223,7 +210,6 @@ class UserCreate(BaseModel):
         orm_mode = True
         schema_extra = {
             "example": {
-                "id": 1,
                 "email": "example@gmail.com",
                 "hashed_password": "password",
                 "is_active": True,
