@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-#from sqlalchemy.orm import Session
 from database import engine
 import models
 from routers import item, user, store
