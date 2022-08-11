@@ -56,6 +56,7 @@ class ItemShow(BaseModel):
     #description: str
     #image_url: str
     #barcode: str
+
     class Config:
         orm_mode = True
 
@@ -64,7 +65,7 @@ class StoreCreate(BaseModel):
     store_name: str
     store_type: StoreType
 
-    inventory: Union[List[ItemCreate], None] = []
+    inventory: ItemCreate#Union[List[ItemCreate], None] = []
 
     #address: Union[str, None] = None
     #city: Union[str, None] = None
@@ -118,7 +119,7 @@ class StoreUpdate(BaseModel):
     store_name: Union[str, None] = None
     store_type: Union[StoreType, None] = None
 
-    inventory: Union[List[ItemCreate], None] = []
+    inventory: ItemUpdate#Union[List[ItemCreate], None] = []
 
     #address: Union[str, None] = None
     #city: Union[str, None] = None
@@ -173,7 +174,7 @@ class StoreShow(BaseModel):
     store_name: str
     store_type: StoreType
     
-    inventory: List[ItemShow] = []
+    inventory: ItemShow#List[ItemShow] = []
 
     #address: str
     #city: str
@@ -218,7 +219,7 @@ class UserCreate(BaseModel):
     password: str
     is_active: Union[bool, None] = True
     money: Union[float, None] = 0.0
-    cart: List[ItemCreate] = []
+    cart: ItemCreate#List[ItemCreate] = []
 
 
     class Config:
@@ -250,8 +251,8 @@ class UserShow(BaseModel):
     last_name:str
     email:str
     money:float
-    cart: List[ItemShow] = []
-    item_id: int
+    cart: ItemShow #need to get to work for list of items
+    
     class Config:
         orm_mode = True
 
@@ -262,7 +263,7 @@ class UserUpdate(BaseModel):
     password: str
     is_active: Union[bool, None] = True
     money: Union[float, None] = None
-    cart: List[ItemCreate] = []
+    cart: ItemUpdate#List[ItemCreate] = []
 
     class Config:
         orm_mode = True

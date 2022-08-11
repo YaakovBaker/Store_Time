@@ -4,7 +4,6 @@ from typing import List
 from sqlalchemy.orm import Session
 
 
-
 router = APIRouter(
     prefix = "/items",
     tags=["item"]
