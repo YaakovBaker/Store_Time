@@ -219,7 +219,7 @@ class UserCreate(BaseModel):
     password: str
     is_active: Union[bool, None] = True
     money: Union[float, None] = 0.0
-    cart: ItemCreate#List[ItemCreate] = []
+    cart: Union[ItemCreate, None] = None#List[ItemCreate] = []
 
 
     class Config:
@@ -251,7 +251,7 @@ class UserShow(BaseModel):
     last_name:str
     email:str
     money:float
-    cart: ItemShow #need to get to work for list of items
+    cart: Union[ItemShow, None] = None #need to get to work for list of items
     
     class Config:
         orm_mode = True
@@ -263,7 +263,7 @@ class UserUpdate(BaseModel):
     password: str
     is_active: Union[bool, None] = True
     money: Union[float, None] = None
-    cart: ItemUpdate#List[ItemCreate] = []
+    cart: Union[ItemUpdate, None] = None#List[ItemCreate] = []
 
     class Config:
         orm_mode = True
@@ -288,3 +288,23 @@ class UserUpdate(BaseModel):
                 ]
             }
         }
+
+
+
+
+#Login
+
+class Login(BaseModel):
+    username: str
+    password: str
+
+
+#JWT TOekn
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    email: Union[str, None] = None

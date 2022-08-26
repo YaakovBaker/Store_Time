@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from database import engine
 import models
-from routers import item, user, store
+from routers import item, user, store, authentication, oauth2
 
 app = FastAPI()
 
@@ -11,6 +11,7 @@ models.Base.metadata.create_all(bind=engine)
 app.include_router(item.router)
 app.include_router(store.router)
 app.include_router(user.router)
+app.include_router(authentication.router)
 
 
 @app.get("/")

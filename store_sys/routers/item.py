@@ -3,6 +3,7 @@ import schemas, database, models
 from typing import List
 from sqlalchemy.orm import Session
 from repository import item
+from routers import oauth2
 
 
 router = APIRouter(
@@ -19,12 +20,12 @@ def create_item(itemI: schemas.ItemCreate, db: Session = Depends(get_db)):
 
 #GET Item Methods
 @router.get("/get_all", response_model=List[schemas.ItemShow])
-def get_all_items(db: Session = Depends(get_db), limit: int = Query(100, ge=0, le=100, description="How many items to return at most.")):
+def get_all_items(db: Session = Depends(get_db), limit: int = Query(100, ge=0, le=100, description="How many items to return at most."), current_user: schemas.UserShow = Depends(oauth2.get_current_user)):
     return item.get_items(db=db, limit=limit)
 
 
 @router.get("/{item_id}", response_model=schemas.ItemShow, status_code=status.HTTP_200_OK)
-def get_item(item_id: int, response: Response, db: Session = Depends(get_db)):
+def get_item(item_id: int, response: Response, db: Session = Depends(get_db), current_user: schemas.UserShow = Depends(oauth2.get_current_user)):
     return_item = item.get_item(db=db, item_id=item_id)
 
     if not return_item:

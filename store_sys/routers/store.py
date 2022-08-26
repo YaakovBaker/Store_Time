@@ -3,6 +3,7 @@ import schemas, database, models
 from typing import List
 from sqlalchemy.orm import Session
 from repository import store
+from routers import oauth2
 
 router = APIRouter(
     prefix = "/store",
@@ -18,11 +19,11 @@ def create_store(storeI: schemas.StoreCreate, db: Session = Depends(get_db), ite
 
 #GET Store Methods
 @router.get("/get_all", response_model=List[schemas.StoreShow])
-def get_all_stores(db: Session = Depends(get_db), limit: int = Query(100, ge=0, le=100, description="How many items to return at most.")):
+def get_all_stores(db: Session = Depends(get_db), limit: int = Query(100, ge=0, le=100, description="How many items to return at most."), current_user: schemas.UserShow = Depends(oauth2.get_current_user)):
     return store.get_stores(db=db, limit=limit)
 
 @router.get("/{store_id}", response_model=schemas.StoreShow)
-def get_store(store_id: int, db: Session = Depends(get_db)):
+def get_store(store_id: int, db: Session = Depends(get_db), current_user: schemas.UserShow = Depends(oauth2.get_current_user)):
     return store.get_store(db=db, store_id=store_id)
 
 #DELETE Store Methods
