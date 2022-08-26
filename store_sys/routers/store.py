@@ -13,8 +13,8 @@ get_db = database.get_db
 
 #POST Store Methods
 @router.post("/", response_model=schemas.StoreCreate, status_code=status.HTTP_201_CREATED)
-def create_store(store: schemas.StoreCreate, db: Session = Depends(get_db), item_id = Query(..., description="Item id to add to store inventory"), ge=1):
-    return store.create_store(db=db, store=store, item_id=item_id)
+def create_store(storeI: schemas.StoreCreate, db: Session = Depends(get_db), item_id = Query(..., description="Item id to add to store inventory"), ge=1):
+    return store.create_store(db=db, store=storeI, item_id=item_id)
 
 #GET Store Methods
 @router.get("/get_all", response_model=List[schemas.StoreShow])
@@ -33,6 +33,6 @@ def delete_store(store_id: int, db: Session = Depends(get_db)):
 
 #UPDATE Store Methods
 @router.put("/update/{store_id}", status_code=status.HTTP_202_ACCEPTED)
-def update_store(store_id: int, store: schemas.StoreUpdate, db: Session = Depends(get_db)):
-    store.update_store(db=db, store_id=store_id, store=store)
+def update_store(store_id: int, storeI: schemas.StoreUpdate, db: Session = Depends(get_db)):
+    store.update_store(db=db, store_id=store_id, store=storeI)
     return Response(status_code=status.HTTP_202_ACCEPTED, content="Store updated")

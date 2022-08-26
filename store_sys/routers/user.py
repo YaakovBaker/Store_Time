@@ -14,8 +14,8 @@ get_db = database.get_db
 
 #POST User Methods
 @router.post("/", response_model=schemas.UserShow, status_code=status.HTTP_201_CREATED)
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db), item_id: int = Query(..., description="Item id to add to user's cart", ge = 1)):
-    return user.create_user(db=db, user=user, item_id=item_id)
+def create_user(userI: schemas.UserCreate, db: Session = Depends(get_db), item_id: int = Query(..., description="Item id to add to user's cart", ge = 1)):
+    return user.create_user(db=db, user=userI, item_id=item_id)
     
 #GET User Methods
 @router.get("/{user_id}", response_model=schemas.UserShow)
@@ -30,6 +30,6 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
 
 #UPDATE User Methods
 @router.put("/update/{user_id}", status_code=status.HTTP_202_ACCEPTED)
-def update_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(get_db)):
-    user.update_user(db=db, user_id=user_id, user=user)
+def update_user(user_id: int, userI: schemas.UserUpdate, db: Session = Depends(get_db)):
+    user.update_user(db=db, user_id=user_id, user=userI)
     return Response(status_code=status.HTTP_202_ACCEPTED, content="User updated")

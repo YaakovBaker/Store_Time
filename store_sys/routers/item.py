@@ -14,8 +14,8 @@ get_db = database.get_db
 
 #POST Item Methods
 @router.post("/", response_model=schemas.ItemCreate, status_code=status.HTTP_201_CREATED)
-def create_item(item: schemas.ItemCreate, db: Session = Depends(get_db)):
-    return item.create_item(db=db, item=item)
+def create_item(itemI: schemas.ItemCreate, db: Session = Depends(get_db)):
+    return item.create_item(db=db, item=itemI)
 
 #GET Item Methods
 @router.get("/get_all", response_model=List[schemas.ItemShow])
@@ -41,6 +41,6 @@ def delete_item(item_id: int, db: Session = Depends(get_db)):
 
 #UPDATE Item Methods
 @router.put("/update/{item_id}", status_code=status.HTTP_202_ACCEPTED)
-def update_item(item_id: int, item: schemas.ItemUpdate, db: Session = Depends(get_db)):
-    item.update_item(db=db, item_id=item_id, item=item)
+def update_item(item_id: int, itemI: schemas.ItemUpdate, db: Session = Depends(get_db)):
+    item.update_item(db=db, item_id=item_id, item=itemI)
     return Response(status_code=status.HTTP_202_ACCEPTED, content="Item updated")
