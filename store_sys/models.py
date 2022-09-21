@@ -11,6 +11,14 @@ class Inventory(UserDefinedType):
     def __init__(self, items: list):
         self.items = items
 
+    def get_col_spec(self, **kw):
+        return "VARCHAR(255)"
+
+    def bind_processor(self, dialect):
+        def process(value):
+            return value
+        return process
+
     def add_item(self, item):
         self.items.append(item)
 
@@ -66,6 +74,14 @@ class Cart(UserDefinedType):
 
     def __init__(self, items: list):
         self.items = items
+    
+    def get_col_spec(self, **kw):
+        return "VARCHAR(255)"
+
+    def bind_processor(self, dialect):
+        def process(value):
+            return value
+        return process
 
     def add_item(self, item):
         self.items.append(item)
