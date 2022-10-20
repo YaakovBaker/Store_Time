@@ -5,31 +5,10 @@ from datetime import datetime
 
 from database import Base
 
-class Inventory(UserDefinedType):
-    cache_ok = True
-    
-    def __init__(self, items: list):
-        self.items = items
-
-    def get_col_spec(self, **kw):
-        return "VARCHAR(255)"
-
-    def bind_processor(self, dialect):
-        def process(value):
-            return value
-        return process
-
-    def add_item(self, item):
-        self.items.append(item)
-
-    def remove_item(self, item):
-        self.items.remove(item)
-
-
 class Item(Base):
     __tablename__ = "items"
 
-    item_id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     price = Column(Float)
     quantity = Column(Integer)
@@ -41,17 +20,22 @@ class Item(Base):
     #stores = relationship("Store", back_populates="inventory")
     #users = relationship("User", back_populates="cart")
 
+class Inventory(Base):
+    __tablename__ = "inventory"
+
+    id = Column(Integer, primary_key=True, index=True)
+    item_id = Column(Integer)
+    store_id = relationship("Store", back_populates="inventory")
+    quantity = Column(Integer)
+
 class Store(Base):
     __tablename__ = "stores"
 
-    store_id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
     store_name = Column(String)
     store_type = Column(String)
 
-    inventory = Column(Inventory([]))
-    
-    #inventory = relationship("Item", back_populates="stores")
-    #item_id = Column(Integer, ForeignKey("items.item_id"))
+    inventory = relationship("Inventory", back_populates="stores")
 
     #address = Column(String, default = None)
     #city = Column(String, default = None)
@@ -65,33 +49,22 @@ class Store(Base):
     #hours = Column(String, default = None)
     #notes = Column(String, default = None)
 
-    #created_at = Column(DateTime, default=datetime.now())
+    created_at = Column(DateTime, default=datetime.now())
     #updated_at = Column(DateTime, default=datetime.now())
     active = Column(Boolean, default=True)
 
+class Cart(Base):
+    __tablename__ = "cart"
 
-class Cart(UserDefinedType):
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = relationship("User", back_populates="cart")
+    item_id = Column(Integer)
+    quantity = Column(Integer)
 
-    def __init__(self, items: list):
-        self.items = items
-    
-    def get_col_spec(self, **kw):
-        return "VARCHAR(255)"
-
-    def bind_processor(self, dialect):
-        def process(value):
-            return value
-        return process
-
-    def add_item(self, item):
-        self.items.append(item)
-
-    def remove_item(self, item):
-        self.items.remove(item)
 class User(Base):
     __tablename__ = "users"
 
-    user_id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
     first_name = Column(String(50), nullable=False)
     last_name = Column(String(50), nullable=False)
     email = Column(String, unique=True, nullable=False)
@@ -99,7 +72,4 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     money = Column(Float, default=0.0)
 
-    cart = Column(Cart([]))
-
-    #cart = relationship("Item", back_populates="users")
-    #item_id = Column(Integer, ForeignKey("items.item_id"))
+    cart = relationship("Item", back_populates="users")
