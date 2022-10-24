@@ -16,11 +16,10 @@ class ItemCreate(BaseModel):
     
     name: str
     price: float
-    quantity: int
     #description: Union[str, None] = None
-    #tax: Union[float, None] = None
-    #image_url: str
-    #barcode: str
+    tax: Union[float, None] = None
+    image_url: str
+    barcode: str
 
     class Config:
         orm_mode = True
@@ -28,34 +27,35 @@ class ItemCreate(BaseModel):
             "example": {
                 "name": "Foo",
                 "price": 10.0,
-                "quantity": 10#,
                 #"description": "This is a description",
-                #"tax": 0.05,
-                #"image_url": "https://example.com/image.png",
-                #"barcode": "123456789"
+                "tax": 0.05,
+                "image_url": "https://example.com/image.png",
+                "barcode": "123456789"
             }
         }
 
 class ItemUpdate(BaseModel):
     price: float
-    quantity: int
-
+    tax: Union[float, None] = None
+    image_url: str
+    barcode: str
     class Config:
         orm_mode = True
         schema_extra = {
             "example": {
                 "price": 20.0,
-                "quantity": 20
+                "tax": 0.05,
+                "image_url": "https://example.com/image.png",
+                "barcode": "123456789"
             }
         }
 
 class ItemShow(BaseModel):
     name: str
     price: float
-    quantity: int
     #description: str
-    #image_url: str
-    #barcode: str
+    image_url: str
+    barcode: str
 
     class Config:
         orm_mode = True
@@ -65,7 +65,7 @@ class StoreCreate(BaseModel):
     store_name: str
     store_type: StoreType
 
-    inventory: ItemCreate#Union[List[ItemCreate], None] = []
+    inventory: List[int]
 
     #address: Union[str, None] = None
     #city: Union[str, None] = None
@@ -93,10 +93,10 @@ class StoreCreate(BaseModel):
                     {
                         "name": "Foo",
                         "price": 10.0,
-                        "quantity": 10#,
                         #"description": "This is a description",
-                        #"tax": 0.05,
-                        #"image_url": "https://example.com/image.png"
+                        "tax": 0.05,
+                        "image_url": "https://example.com/image.png",
+                        "barcode": "123456789"
                     }
                 ],
                 #"address": "123 Main St",
@@ -119,7 +119,7 @@ class StoreUpdate(BaseModel):
     store_name: Union[str, None] = None
     store_type: Union[StoreType, None] = None
 
-    inventory: ItemUpdate#Union[List[ItemCreate], None] = []
+    inventory: List[int]
 
     #address: Union[str, None] = None
     #city: Union[str, None] = None
@@ -147,11 +147,10 @@ class StoreUpdate(BaseModel):
                     {
                         "name": "Foo",
                         "price": 10.0,
-                        "quantity": 10#,
                         #"description": "This is a description",
-                        #"tax": 0.05,
-                        #"image_url": "https://example.com/image.png",
-                        #"barcode": "123456789"
+                        "tax": 0.05,
+                        "image_url": "https://example.com/image.png",
+                        "barcode": "123456789"
                     }
                 ],
                 #"address": "123 Main St",
@@ -174,7 +173,7 @@ class StoreShow(BaseModel):
     store_name: str
     store_type: StoreType
     
-    inventory: ItemShow#List[ItemShow] = []
+    inventory: List[int]
 
     #address: str
     #city: str
@@ -196,8 +195,7 @@ class StoreShow(BaseModel):
                 "inventory": [
                     {
                         "name": "Foo",
-                        "price": 10.0,
-                        "quantity": 10
+                        "price": 10.0
                     }
                 ],
                 #"address": "123 Main St",
@@ -236,8 +234,7 @@ class UserCreate(BaseModel):
                     {
                         "name": "Foo",
                         "price": 10.0,
-                        "quantity": 10,
-                        "description": "This is a description",
+                        #"description": "This is a description",
                         "tax": 0.05,
                         "image_url": "https://example.com/image.png",
                         "barcode": "123456789"
@@ -251,7 +248,7 @@ class UserShow(BaseModel):
     last_name:str
     email:str
     money:float
-    cart: Union[ItemShow, None] = None #need to get to work for list of items
+    cart: List[int]
     
     class Config:
         orm_mode = True
@@ -279,11 +276,10 @@ class UserUpdate(BaseModel):
                     {
                         "name": "Foo",
                         "price": 10.0,
-                        "quantity": 10,
-                        "description": "This is a description",
+                        #"description": "This is a description",
                         "tax": 0.05,
                         "image_url": "https://example.com/image.png",
-                        "barcode": "1234567890123"
+                        "barcode": "123456789"
                     }
                 ]
             }

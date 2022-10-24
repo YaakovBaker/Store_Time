@@ -11,14 +11,10 @@ class Item(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     price = Column(Float)
-    quantity = Column(Integer)
     #description = Column(String)
-    #tax = Column(Float)
-    #image_url = Column(String)
-    #barcode = Column(String(10), unique=True, nullable=False)
-
-    #stores = relationship("Store", back_populates="inventory")
-    #users = relationship("User", back_populates="cart")
+    tax = Column(Float)
+    image_url = Column(String)
+    barcode = Column(String(10), unique=True, nullable=False)
 
 class Inventory(Base):
     __tablename__ = "inventory"
