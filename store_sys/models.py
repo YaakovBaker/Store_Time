@@ -1,3 +1,4 @@
+from enum import unique
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.types import UserDefinedType
@@ -16,12 +17,18 @@ class Item(Base):
     image_url = Column(String)
     barcode = Column(String(10), unique=True, nullable=False)
 
+    #allow inventory and cart to take from here
+
 class Inventory(Base):
     __tablename__ = "inventory"
 
     id = Column(Integer, primary_key=True, index=True)
-    item_id = Column(Integer)
-    store_id = relationship("Store", back_populates="inventory")
+    #in Store will have one to many here, this is many to one
+    store = relationship("Store", back_populates="inventory")
+    store_id = Column(Integer, ForeignKey("users.id"))
+    #make correct one to one not bidirectional
+    item = relationship("Item", back_populates="inventory")
+    item_id = Column(Integer, ForeignKey("items.id"))
     quantity = Column(Integer)
 
 class Store(Base):
@@ -31,30 +38,37 @@ class Store(Base):
     store_name = Column(String)
     store_type = Column(String)
 
+    #one to many
     inventory = relationship("Inventory", back_populates="stores")
 
+    #make correct one to one but not bidirectional
+    country = relationship("Country", back_populates="stores")
+    region = relationship("Region", back_populates="stores")
+    city = relationship("City", back_populates="stores")
     #address = Column(String, default = None)
-    #city = Column(String, default = None)
-    #state = Column(String, default = None)
     #zip = Column(String, default = None)
 
     phone = Column(String)
     email = Column(String)
-    #url = Column(String)
+    url = Column(String)
 
     #hours = Column(String, default = None)
     #notes = Column(String, default = None)
 
     created_at = Column(DateTime, default=datetime.now())
-    #updated_at = Column(DateTime, default=datetime.now())
+    updated_at = Column(DateTime, default=datetime.now())
     active = Column(Boolean, default=True)
 
 class Cart(Base):
     __tablename__ = "cart"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = relationship("User", back_populates="cart")
-    item_id = Column(Integer)
+    #one to many for user to Cart but many to one for cart to user
+    user = relationship("User", back_populates="cart")
+    user_id = Column(Integer, ForeignKey("users.id"))
+    #make one to one not bidirectional 
+    item = relationship("Item", back_populates="cart")
+    item_id = Column(Integer, ForeignKey("items.id"))
     quantity = Column(Integer)
 
 class User(Base):
@@ -68,4 +82,27 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     money = Column(Float, default=0.0)
 
+    #make correct one to one but not bidirectional
+    country = relationship("Country", back_populates="users")
+    region = relationship("Region", back_populates="users")
+    city = relationship("City", back_populates="users")
+    #one to many
     cart = relationship("Item", back_populates="users")
+
+class Country(Base):
+    __tablename__ = "countries"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, nullable = False)
+
+class Region(Base):
+    __tablename__ = "regions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, nullable = False)
+
+class City(Base):
+    __tablename__ = "cities"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, nullable = False)
