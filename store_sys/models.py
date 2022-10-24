@@ -52,8 +52,7 @@ class Store(Base):
     email = Column(String)
     url = Column(String)
 
-    #hours = Column(String, default = None)
-    #notes = Column(String, default = None)
+    hours = Column(String, default = None)
 
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
@@ -86,6 +85,8 @@ class User(Base):
     country = relationship("Country", back_populates="users")
     region = relationship("Region", back_populates="users")
     city = relationship("City", back_populates="users")
+    #address = Column(String, default = None)
+    #zip = Column(String, default = None)
     #one to many
     cart = relationship("Item", back_populates="users")
 
