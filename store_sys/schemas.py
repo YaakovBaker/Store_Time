@@ -133,8 +133,6 @@ class UserCreate(UserBase):
     is_active: Union[bool, None] = True
     money: Union[float, None] = 0.0
 
-    cart: Union[ItemCreate, None] = None
-
     country: Union[str, None] = None
     region: Union[str, None] = None
     city: Union[str, None] = None
@@ -149,7 +147,7 @@ class UserShow(UserBase):
     last_name:str
     email:str
     money:float
-    cart: List[int]
+    cart: List[ItemShow]
     
     country: Union[str, None] = None
     region: Union[str, None] = None

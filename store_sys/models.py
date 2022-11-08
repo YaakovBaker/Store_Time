@@ -1,6 +1,6 @@
 from enum import unique
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, DateTime
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.types import UserDefinedType
 from datetime import datetime
 
@@ -12,23 +12,22 @@ class Item(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     price = Column(Float)
-    #description = Column(String)
     tax = Column(Float)
     image_url = Column(String)
     barcode = Column(String(10), unique=True, nullable=False)
-
-    #allow inventory and cart to take from here
+    #inventory key that uses this object
+    #cart key that uses this object
 
 class Inventory(Base):
     __tablename__ = "inventory"
 
     id = Column(Integer, primary_key=True, index=True)
     #in Store will have one to many here, this is many to one
-    store = relationship("Store", back_populates="inventory")
-    store_id = Column(Integer, ForeignKey("users.id"))
-    #make correct one to one not bidirectional
-    item = relationship("Item", back_populates="inventory")
+    store = relationship("Store", backref=backref("inventory", uselist=False))
+    store_id = Column(Integer, ForeignKey("stores.id"))
+    #one to one
     item_id = Column(Integer, ForeignKey("items.id"))
+    item = relationship("Item", backref=backref("inventory", uselist=False))
     quantity = Column(Integer)
 
 class Store(Base):
@@ -39,12 +38,12 @@ class Store(Base):
     store_type = Column(String)
 
     #one to many
-    inventory = relationship("Inventory", back_populates="stores")
+    store_inventory = relationship("Inventory", back_populates="stores")
 
     #make correct one to one but not bidirectional
-    country = relationship("Country", back_populates="stores")
-    region = relationship("Region", back_populates="stores")
-    city = relationship("City", back_populates="stores")
+    country = relationship("Country", back_populates="stores", uselist = False)
+    region = relationship("Region", back_populates="stores", uselist = False)
+    city = relationship("City", back_populates="stores", uselist = False)
     #address = Column(String, default = None)
     #zip = Column(String, default = None)
 
@@ -63,11 +62,11 @@ class Cart(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     #one to many for user to Cart but many to one for cart to user
-    user = relationship("User", back_populates="cart")
     user_id = Column(Integer, ForeignKey("users.id"))
+    user = relationship("User", backref=backref("cart", uselist=False))
     #make one to one not bidirectional 
-    item = relationship("Item", back_populates="cart")
     item_id = Column(Integer, ForeignKey("items.id"))
+    item = relationship("Item", backref=backref("cart", uselist=False))
     quantity = Column(Integer)
 
 class User(Base):
@@ -82,13 +81,13 @@ class User(Base):
     money = Column(Float, default=0.0)
 
     #make correct one to one but not bidirectional
-    country = relationship("Country", back_populates="users")
-    region = relationship("Region", back_populates="users")
-    city = relationship("City", back_populates="users")
+    country = relationship("Country", back_populates="users", uselist = False)
+    region = relationship("Region", back_populates="users", uselist = False)
+    city = relationship("City", back_populates="users", uselist = False)
     #address = Column(String, default = None)
     #zip = Column(String, default = None)
     #one to many
-    cart = relationship("Item", back_populates="users")
+    user_cart = relationship("Item", back_populates="users")
 
 class Country(Base):
     __tablename__ = "countries"
