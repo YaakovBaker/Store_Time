@@ -15,8 +15,8 @@ get_db = database.get_db
 
 #POST User Methods
 @router.post("/", response_model=schemas.UserShow, status_code=status.HTTP_201_CREATED)
-def create_user(userI: schemas.UserCreate, db: Session = Depends(get_db), item_id: int = Query(default=None, description="Item id to add to user's cart", ge = 1)):
-    return user.create_user(db=db, user=userI, item_id=item_id)
+def create_user(userI: schemas.UserCreate, db: Session = Depends(get_db)):
+    return user.create_user(db=db, user=userI)
     
 #GET User Methods
 @router.get("/{user_id}", response_model=schemas.UserShow)
